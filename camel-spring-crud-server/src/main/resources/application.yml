@@ -1,0 +1,87 @@
+server:
+  port: 9096
+  servlet:
+    encoding:
+      force: true
+      charset: UTF-8
+  max-http-header-size: 756000
+
+spring:
+  application:
+    name: camel-spring-crud-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test2
+    username: saber66
+    password: AdminSaber66
+    minPoolSize: 20
+    maxPoolSize: 35
+    initialPoolSize: 20
+    maxStatementsPerConnection: 300
+    maxIdleTime: 60
+    acquireIncrement: 5
+    maxConnectionAge: 60
+    numHelperThreads: 300
+    idleConnectionTestPeriod: 300
+    checkoutTimeout: 60000
+    testConnectionOnCheckin: true
+    testConnectionOnCheckout: false
+    preferredTestQuery: 'SELECT 1 '
+
+service:
+  api:
+    base-path: /services/camel-crud
+  swagger:
+    path: /v2/api-docs
+    title: 'Camel spring crud server'
+    version: 'version1.0'
+  log:
+    pretty-print: 'true'
+
+
+springdoc:
+
+  swagger-ui:
+    urls:
+      - name: 'Camel spring crud server'
+        url: ${service.api.base-path}${service.swagger.path}
+    path: /swagger-ui.html
+    layout: StandaloneLayout
+
+  api-docs:
+    groups:
+      enabled: true
+
+
+
+camel:
+  springboot:
+    route-controller-thread-pool-size: 30000
+    producer-template-cache-size: 7000
+    consumer-template-cache-size: 7000
+    jmx-management-statistics-level: extended
+    main-run-controller: true
+
+  servlet:
+    mapping:
+      context-path: ${service.api.base-path}/*
+  component:
+    http:
+      connections-per-route: 3000
+      max-total-connections: 30000
+      connection-time-to-live: 30000
+      connection-request-timeout: 30000
+      connect-timeout: 30000
+      socket-timeout: 30000
+  dataformat:
+    json-jackson:
+      pretty-print: true
+      auto-discover-object-mapper: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: /actuators/caeml-crud
