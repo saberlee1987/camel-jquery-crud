@@ -84,4 +84,4 @@ management:
     web:
       exposure:
         include: '*'
-      base-path: /actuators/caeml-crud
+      base-path: /actuators/camel-crud
