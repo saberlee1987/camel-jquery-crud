@@ -2,7 +2,7 @@ package com.saber.camel_spring_crud_server.routes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saber.camel_spring_crud_server.beans.SayHelloBean;
-import com.saber.camel_spring_crud_server.dto.HelloDto;
+import com.saber.camel_spring_crud_server.dto.HelloResponseDto;
 import com.saber.camel_spring_crud_server.dto.ServiceErrorResponse;
 import com.saber.camel_spring_crud_server.dto.ValidationDto;
 import com.saber.camel_spring_crud_server.exceptions.BadRequestException;
@@ -12,8 +12,9 @@ import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestParamType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import javax.ws.rs.core.MediaType;
+
 import java.util.Collections;
 
 @Component
@@ -31,7 +32,7 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 				.get("/sayHello")
 				.id(Routes.SAY_HELLO_ROUTE)
 				.description("say Hello")
-				.responseMessage().code(200).responseModel(HelloDto.class).endResponseMessage()
+				.responseMessage().code(200).responseModel(HelloResponseDto.class).endResponseMessage()
 				.responseMessage().code(400).responseModel(ServiceErrorResponse.class).endResponseMessage()
 				.responseMessage().code(401).responseModel(ServiceErrorResponse.class).endResponseMessage()
 				.responseMessage().code(403).responseModel(ServiceErrorResponse.class).endResponseMessage()
@@ -39,7 +40,7 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 				.responseMessage().code(406).responseModel(ServiceErrorResponse.class).endResponseMessage()
 				.responseMessage().code(500).responseModel(ServiceErrorResponse.class).endResponseMessage()
 				.responseMessage().code(504).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.produces(MediaType.APPLICATION_JSON)
+				.produces(MediaType.APPLICATION_JSON_VALUE)
 				.param().name("firstName").type(RestParamType.query).dataType("string").required(true).example("Saber").endParam()
 				.param().name("lastName").type(RestParamType.query).dataType("string").required(true).example("Azizi").endParam()
 				.enableCORS(true)

@@ -28,7 +28,7 @@ public class RouteDefinition extends RouteBuilder {
 				.apiContextPath(swaggerPath)
 				.apiContextRouteId("api-doc")
 				.enableCORS(true)
-				.bindingMode(RestBindingMode.auto)
+				.bindingMode(RestBindingMode.json)
 				.apiProperty("api.title",swaggerTitle)
 				.apiProperty("api.version",swaggerVersion)
 				.apiProperty("cors","true")
