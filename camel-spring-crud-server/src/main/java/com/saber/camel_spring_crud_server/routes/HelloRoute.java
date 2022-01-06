@@ -12,6 +12,7 @@ import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestParamType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
@@ -32,14 +33,14 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 				.get("/sayHello")
 				.id(Routes.SAY_HELLO_ROUTE)
 				.description("say Hello")
-				.responseMessage().code(200).responseModel(HelloResponseDto.class).endResponseMessage()
-				.responseMessage().code(400).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(401).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(403).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(404).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(406).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(500).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(504).responseModel(ServiceErrorResponse.class).endResponseMessage()
+				.responseMessage().code(HttpStatus.OK.value()).message(HttpStatus.OK.getReasonPhrase()).responseModel(HelloResponseDto.class).endResponseMessage()
+				.responseMessage().code(HttpStatus.BAD_REQUEST.value()).message(HttpStatus.BAD_REQUEST.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
+				.responseMessage().code(HttpStatus.UNAUTHORIZED.value()).message(HttpStatus.UNAUTHORIZED.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
+				.responseMessage().code(HttpStatus.FORBIDDEN.value()).message(HttpStatus.FORBIDDEN.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
+				.responseMessage().code(HttpStatus.NOT_FOUND.value()).message(HttpStatus.NOT_FOUND.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
+				.responseMessage().code(HttpStatus.NOT_ACCEPTABLE.value()).message(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
+				.responseMessage().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).message(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
+				.responseMessage().code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
 				.produces(MediaType.APPLICATION_JSON_VALUE)
 				.param().name("firstName").type(RestParamType.query).dataType("string").required(true).example("Saber").endParam()
 				.param().name("lastName").type(RestParamType.query).dataType("string").required(true).example("Azizi").endParam()

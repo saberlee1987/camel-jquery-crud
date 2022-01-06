@@ -11,4 +11,10 @@ create table persons
     constraint nationalCode
         unique (nationalCode)
 );
+alter table customer change customercity customer_city VARCHAR(225);
+
+ALTER TABLE table
+    ADD [COLUMN] column_name_1 column_1_definition [FIRST|AFTER existing_column],
+ADD [COLUMN] column_name_2 column_2_definition [FIRST|AFTER existing_column],
+...;
 
