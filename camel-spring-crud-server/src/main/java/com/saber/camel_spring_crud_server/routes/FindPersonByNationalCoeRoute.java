@@ -3,7 +3,6 @@ package com.saber.camel_spring_crud_server.routes;
 import com.saber.camel_spring_crud_server.dto.FindAllPersonResponse;
 import com.saber.camel_spring_crud_server.dto.ServiceErrorResponse;
 import org.apache.camel.Exchange;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestParamType;
 import org.springframework.http.HttpStatus;
@@ -32,7 +31,8 @@ public class FindPersonByNationalCoeRoute extends AbstractRestRouteBuilder {
                 .responseMessage().code(HttpStatus.NOT_FOUND.value()).message(HttpStatus.NOT_FOUND.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
                 .responseMessage().code(HttpStatus.NOT_ACCEPTABLE.value()).message(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
                 .responseMessage().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).message(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-                .responseMessage().code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()                .bindingMode(RestBindingMode.off)
+                .responseMessage().code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
+                .bindingMode(RestBindingMode.json)
                 .route()
                 .routeId(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE)
                 .routeGroup(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GROUP)
@@ -60,7 +60,6 @@ public class FindPersonByNationalCoeRoute extends AbstractRestRouteBuilder {
         from(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT_RESULT))
                 .routeId(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT_RESULT)
                 .routeGroup(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GROUP)
-                .marshal().json(JsonLibrary.Jackson)
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200));
 
     }

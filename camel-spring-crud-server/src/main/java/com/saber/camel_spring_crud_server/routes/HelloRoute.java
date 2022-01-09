@@ -45,7 +45,7 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 				.param().name("firstName").type(RestParamType.query).dataType("string").required(true).example("Saber").endParam()
 				.param().name("lastName").type(RestParamType.query).dataType("string").required(true).example("Azizi").endParam()
 				.enableCORS(true)
-				.bindingMode(RestBindingMode.off)
+				.bindingMode(RestBindingMode.json)
 				.route()
 				.routeId(Routes.SAY_HELLO_ROUTE)
 				.routeGroup(Routes.SAY_HELLO_ROUTE_GROUP)

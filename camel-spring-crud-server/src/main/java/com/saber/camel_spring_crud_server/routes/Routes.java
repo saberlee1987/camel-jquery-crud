@@ -6,18 +6,24 @@ public interface Routes {
 	String SAY_HELLO_ROUTE = "say-hello-route";
 	String FIND_ALL_PERSON_ROUTE = "find-all-person-route";
 	String ADD_PERSON_ROUTE = "add-person-route";
+	String UPDATE_PERSON_ROUTE = "update-person-route";
+	String DELETE_PERSON_ROUTE = "delete-person-route";
 	String FIND_PERSON_BY_NATIONAL_CODE_ROUTE = "find-person-by-national-code-route" ;
 	
 	//////////////////////////////////////////////////////////////////
 	String SAY_HELLO_ROUTE_GATEWAY = "say-hello-route-gateway";
 	String FIND_ALL_PERSON_ROUTE_GATEWAY = "find-all-person-route-gateway";
 	String ADD_PERSON_ROUTE_GATEWAY = "add-person-route-gateway";
+	String UPDATE_PERSON_ROUTE_GATEWAY = "update-person-route-gateway";
+	String DELETE_PERSON_ROUTE_GATEWAY = "delete-person-route-gateway";
 	String FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY = "find-person-by-national-code-route-gateway" ;
 	
 	////////////////////////////////////////////////////
 	String SAY_HELLO_ROUTE_GATEWAY_OUT = "say-hello-route-gateway-out";
 	String FIND_ALL_PERSON_ROUTE_GATEWAY_OUT = "find-all-person-route-gateway-out";
 	String ADD_PERSON_ROUTE_GATEWAY_OUT = "add-person-route-gateway-out";
+	String UPDATE_PERSON_ROUTE_GATEWAY_OUT = "update-person-route-gateway-out";
+	String DELETE_PERSON_ROUTE_GATEWAY_OUT = "delete-person-route-gateway-out";
 	String FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT = "find-person-by-national-code-route-gateway-out" ;
 	String FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT_RESULT = "find-person-by-national-code-route-gateway-out-result" ;
 	
@@ -25,6 +31,8 @@ public interface Routes {
 	String SAY_HELLO_ROUTE_GROUP = "say-hello-route-group";
 	String FIND_ALL_PERSON_ROUTE_GROUP = "find-all-person-route-group";
 	String ADD_PERSON_ROUTE_GROUP = "add-person-route-group";
+	String UPDATE_PERSON_ROUTE_GROUP = "update-person-route-group";
+	String DELETE_PERSON_ROUTE_GROUP = "delete-person-route-group";
 	String FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GROUP = "find-person-by-national-code-route-group" ;
 	String THROWS_EXCEPTION_ROUTE_GROUP = "throws-exception-route-group";
 	

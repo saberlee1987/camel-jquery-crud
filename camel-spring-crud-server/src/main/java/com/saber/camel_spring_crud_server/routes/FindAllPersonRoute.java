@@ -32,7 +32,7 @@ public class FindAllPersonRoute extends AbstractRestRouteBuilder {
 				.responseMessage().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).message(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
 				.responseMessage().code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
 				.enableCORS(true)
-				.bindingMode(RestBindingMode.off)
+				.bindingMode(RestBindingMode.json)
 				.route()
 				.routeId(Routes.FIND_ALL_PERSON_ROUTE)
 				.routeGroup(Routes.FIND_ALL_PERSON_ROUTE_GROUP)
@@ -57,6 +57,7 @@ public class FindAllPersonRoute extends AbstractRestRouteBuilder {
 					exchange.getIn().setBody(response);
 				})
 				.log("Response for find All persons ===> ${in.body}")
+				.unmarshal().json(JsonLibrary.Jackson)
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200));
 	}
 }

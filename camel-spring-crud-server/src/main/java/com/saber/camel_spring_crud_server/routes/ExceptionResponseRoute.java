@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.bean.validator.BeanValidationException;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -95,8 +94,7 @@ public class ExceptionResponseRoute extends RouteBuilder {
 					errorResponse.setOriginalMessage(String.format("{\"code\":%d,\"message\":\"%s\"}", ServiceResponseEnum.RESOURCE_NOT_FOUND_EXCEPTION.getCode(), exception.getMessage()));
 					log.error("Error ResourceNotFoundException ===> {}", mapper.writeValueAsString(errorResponse));
 					exchange.getMessage().setBody(errorResponse);
-				})
-		.marshal().json(JsonLibrary.Jackson);
+				});
 		
 		
 		from(String.format("direct:%s",Routes.BEAN_VALIDATION_EXCEPTION_ROUTE))
