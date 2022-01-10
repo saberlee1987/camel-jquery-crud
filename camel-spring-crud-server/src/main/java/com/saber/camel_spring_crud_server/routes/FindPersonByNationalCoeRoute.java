@@ -1,6 +1,6 @@
 package com.saber.camel_spring_crud_server.routes;
 
-import com.saber.camel_spring_crud_server.dto.FindAllPersonResponse;
+import com.saber.camel_spring_crud_server.dto.PersonDto;
 import com.saber.camel_spring_crud_server.dto.ServiceErrorResponse;
 import org.apache.camel.Exchange;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -24,7 +24,7 @@ public class FindPersonByNationalCoeRoute extends AbstractRestRouteBuilder {
                 .produces(MediaType.APPLICATION_JSON_VALUE)
                 .enableCORS(true)
                 .param().name(Headers.nationalCode).type(RestParamType.header).example("0079028748").dataType("string").required(true).endParam()
-                .responseMessage().code(HttpStatus.OK.value()).message(HttpStatus.OK.getReasonPhrase()).responseModel(FindAllPersonResponse.class).example("example1", "{\"firstname\": \"saber\",\"lastname\": \"azizi\", \"nationalCode\": \"0079028748\",\"age\": 34,\"email\": \"saberazizi66@yahoo.com\",\"mobile\": \"09124567895\"}").endResponseMessage()
+                .responseMessage().code(HttpStatus.OK.value()).message(HttpStatus.OK.getReasonPhrase()).responseModel(PersonDto.class).example("example1", "{\"firstname\": \"saber\",\"lastname\": \"azizi\", \"nationalCode\": \"0079028748\",\"age\": 34,\"email\": \"saberazizi66@yahoo.com\",\"mobile\": \"09124567895\"}").endResponseMessage()
                 .responseMessage().code(HttpStatus.BAD_REQUEST.value()).message(HttpStatus.BAD_REQUEST.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
                 .responseMessage().code(HttpStatus.UNAUTHORIZED.value()).message(HttpStatus.UNAUTHORIZED.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
                 .responseMessage().code(HttpStatus.FORBIDDEN.value()).message(HttpStatus.FORBIDDEN.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()

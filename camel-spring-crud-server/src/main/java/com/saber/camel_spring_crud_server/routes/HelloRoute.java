@@ -8,7 +8,6 @@ import com.saber.camel_spring_crud_server.dto.ValidationDto;
 import com.saber.camel_spring_crud_server.exceptions.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestParamType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +66,7 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 		from(String.format("direct:%s", Routes.SAY_HELLO_ROUTE_GATEWAY_OUT))
 				.routeId(Routes.SAY_HELLO_ROUTE_GATEWAY_OUT)
 				.routeGroup(Routes.SAY_HELLO_ROUTE_GROUP)
-				.marshal().json(JsonLibrary.Jackson)
-				.log("Response for sayHello ===> {response : ${in.body}}")
+				.log("Response for sayHello ===>  ${in.body}")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200));
 		
 		from(String.format("direct:%s", Routes.SAY_HELLO_ROUTE_ERROR_HANDLER))
@@ -86,7 +84,6 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 					log.error("Error BadRequestException ===> {}", mapper.writeValueAsString(errorResponse));
 					exchange.getIn().setBody(errorResponse);
 				})
-				.marshal().json(JsonLibrary.Jackson)
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400));
 		
 		from(String.format("direct:%s",Routes.SAY_HELLO_ROUTE_FINALLY))
