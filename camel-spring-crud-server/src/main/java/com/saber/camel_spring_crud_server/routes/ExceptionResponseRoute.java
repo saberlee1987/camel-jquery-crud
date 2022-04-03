@@ -44,7 +44,10 @@ public class ExceptionResponseRoute extends RouteBuilder {
 					validationDto.setFieldName(exception.getPath().toString());
 					validationDto.setDetailMessage(exception.getLocalizedMessage());
 					errorResponse.setValidationDetails(Collections.singletonList(validationDto));
-					log.error("Error JsonMappingException ===> {}", mapper.writeValueAsString(errorResponse));
+					log.error("Error for {} , correlation {} , JsonMappingException ===> {}"
+							,exchange.getIn().getHeader(Headers.url)
+							,exchange.getIn().getHeader(Headers.correlation)
+							, mapper.writeValueAsString(errorResponse));
 					exchange.getMessage().setBody(errorResponse);
 				});
 		
@@ -62,7 +65,10 @@ public class ExceptionResponseRoute extends RouteBuilder {
 					validationDto.setFieldName(exception.getRequestPayloadAsString());
 					validationDto.setDetailMessage(exception.getLocalizedMessage());
 					errorResponse.setValidationDetails(Collections.singletonList(validationDto));
-					log.error("Error JsonMappingException ===> {}", mapper.writeValueAsString(errorResponse));
+					log.error("Error for {} , correlation {} , JsonMappingException ===> {}"
+							,exchange.getIn().getHeader(Headers.url)
+							,exchange.getIn().getHeader(Headers.correlation)
+							, mapper.writeValueAsString(errorResponse));
 					exchange.getMessage().setBody(errorResponse);
 				});
 		
@@ -77,7 +83,10 @@ public class ExceptionResponseRoute extends RouteBuilder {
 					errorResponse.setCode(ServiceResponseEnum.RESOURCE_DUPLICATION_EXCEPTION.getCode());
 					errorResponse.setMessage(ServiceResponseEnum.RESOURCE_DUPLICATION_EXCEPTION.getMessage());
 					errorResponse.setOriginalMessage(String.format("{\"code\":%d,\"message\":\"%s\"}", ServiceResponseEnum.RESOURCE_DUPLICATION_EXCEPTION.getCode(), exception.getMessage()));
-					log.error("Error ResourceDuplicationException ===> {}", mapper.writeValueAsString(errorResponse));
+					log.error("Error for {} , correlation {}  ResourceDuplicationException ===> {}"
+							,exchange.getIn().getHeader(Headers.url)
+							,exchange.getIn().getHeader(Headers.correlation)
+							, mapper.writeValueAsString(errorResponse));
 					
 					exchange.getMessage().setBody(errorResponse);
 				});
@@ -92,7 +101,11 @@ public class ExceptionResponseRoute extends RouteBuilder {
 					errorResponse.setCode(ServiceResponseEnum.RESOURCE_NOT_FOUND_EXCEPTION.getCode());
 					errorResponse.setMessage(ServiceResponseEnum.RESOURCE_NOT_FOUND_EXCEPTION.getMessage());
 					errorResponse.setOriginalMessage(String.format("{\"code\":%d,\"message\":\"%s\"}", ServiceResponseEnum.RESOURCE_NOT_FOUND_EXCEPTION.getCode(), exception.getMessage()));
-					log.error("Error ResourceNotFoundException ===> {}", mapper.writeValueAsString(errorResponse));
+					log.error("Error for {} , correlation {} ,  ResourceNotFoundException ===> {}"
+							
+							,exchange.getIn().getHeader(Headers.url)
+							,exchange.getIn().getHeader(Headers.correlation)
+							, mapper.writeValueAsString(errorResponse));
 					exchange.getMessage().setBody(errorResponse);
 				});
 		
@@ -116,7 +129,10 @@ public class ExceptionResponseRoute extends RouteBuilder {
 						validationDetails.add(validationDto);
 					}
 					errorResponse.setValidationDetails(validationDetails);
-					log.error("Error BeanValidationException ===> {}", mapper.writeValueAsString(errorResponse));
+					log.error("Error for {} , correlation {} , BeanValidationException ===> {}"
+							,exchange.getIn().getHeader(Headers.url)
+							,exchange.getIn().getHeader(Headers.correlation)
+							, mapper.writeValueAsString(errorResponse));
 					exchange.getMessage().setBody(errorResponse);
 				});
 	}

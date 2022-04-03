@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/5.1.3/css/bootstrap.css">
+    <script src="webjars/bootstrap/5.1.3/js/bootstrap.js"></script>
+    <script src="webjars/jquery/3.6.0/jquery.js"></script>
+    <style>
+        body {
+            margin: 10px;
+            padding: 10px;
+        }
+
+        table {
+            width: 900px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h2>Person crud Operation</h2>
+
+<div class="container">
+    <div class="row">
+        <form id="personForm" class="form-control">
+
+            <div class="form-group">
+                <label for="firstName">firstName</label>
+                <input type="text" class="form-control" id="firstName" placeholder="Enter firstName">
+                <small id="firstNameRequired" hidden class="error">firstName is Required</small>
+            </div>
+            <div class="form-group">
+                <label for="lastName">lastName</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Enter lastName">
+                <small id="lastNameRequired" hidden class="error">lastName is Required</small>
+            </div>
+            <div class="form-group">
+                <label for="nationalCode">nationalCode</label>
+                <input type="text" class="form-control" id="nationalCode" placeholder="Enter nationalCode">
+                <small id="nationalCodeRequired" hidden class="error">nationalCode is Required</small>
+            </div>
+
+            <div class="form-group">
+                <label for="age">age</label>
+                <input type="text" class="form-control" id="age" placeholder="Enter age">
+                <small id="ageRequired" hidden class="error">age is Required</small>
+            </div>
+
+            <div class="form-group">
+                <label for="email">email</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email">
+                <small id="emailRequired" hidden class="error">email is Required</small>
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">mobile</label>
+                <input type="text" class="form-control" id="mobile" placeholder="Enter mobile">
+                <small id="mobileRequired" hidden class="error">mobile is Required</small>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary">Add Person</button>
+                <button class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<br><br>
+
+
+<div class="container">
+    <div class="row">
+        <table class="table table-hover">
+            <thead class="bg-light">
+            <tr>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>NationalCode</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Bruce</td>
+                <td>Lee</td>
+                <td>0065842139</td>
+                <td>33</td>
+                <td>bruce@yahoo.com</td>
+                <td>09351298856</td>
+                <td>
+                    <button class="btn-warning">Update</button>
+                </td>
+                <td>
+                    <button class="btn-danger">Delete</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Saber</td>
+                <td>Azizi</td>
+                <td>0079028748</td>
+                <td>34</td>
+                <td>saber66@yahoo.com</td>
+                <td>09365627895</td>
+                <td>
+                    <button class="btn-warning">Update</button>
+                </td>
+                <td>
+                    <button class="btn-danger">Delete</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Jackie</td>
+                <td>Chan</td>
+                <td>0023412398</td>
+                <td>65</td>
+                <td>jackie54@yahoo.com</td>
+                <td>09351298857</td>
+                <td>
+                    <button class="btn-warning">Update</button>
+                </td>
+                <td>
+                    <button class="btn-danger">Delete</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<button class="btn-primary">Test</button>
+</body>
+</html>

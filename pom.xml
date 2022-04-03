@@ -17,6 +17,7 @@
 
     <modules>
         <module>camel-spring-crud-server</module>
+        <module>spring-jquery</module>
     </modules>
 
 </project>

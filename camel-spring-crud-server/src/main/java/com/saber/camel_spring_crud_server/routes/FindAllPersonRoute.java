@@ -1,6 +1,7 @@
 package com.saber.camel_spring_crud_server.routes;
 
 import com.saber.camel_spring_crud_server.dto.FindAllPersonResponse;
+import com.saber.camel_spring_crud_server.dto.PersonDto;
 import com.saber.camel_spring_crud_server.dto.ServiceErrorResponse;
 import org.apache.camel.Exchange;
 import org.apache.camel.model.dataformat.JsonLibrary;
@@ -8,6 +9,8 @@ import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 
 @Component
@@ -36,27 +39,29 @@ public class FindAllPersonRoute extends AbstractRestRouteBuilder {
 				.route()
 				.routeId(Routes.FIND_ALL_PERSON_ROUTE)
 				.routeGroup(Routes.FIND_ALL_PERSON_ROUTE_GROUP)
+				.setHeader(Headers.url,constant("{{service.api.base-path}}/persons/findAll"))
+				.setHeader(Headers.correlation,constant(UUID.randomUUID().toString()))
 				.to(String.format("direct:%s", Routes.FIND_ALL_PERSON_ROUTE_GATEWAY));
 		
 		from(String.format("direct:%s", Routes.FIND_ALL_PERSON_ROUTE_GATEWAY))
 				.routeId(Routes.FIND_ALL_PERSON_ROUTE_GATEWAY)
 				.routeGroup(Routes.FIND_ALL_PERSON_ROUTE_GROUP)
-				.log("Request for find all Persons ")
+				.log("Request for ${in.header.url} , correlation : ${in.header.correlation} find all Persons ")
 				.to(String.format("direct:%s", Routes.FIND_ALL_PERSON_ROUTE_GATEWAY_OUT));
 		
 		from(String.format("direct:%s", Routes.FIND_ALL_PERSON_ROUTE_GATEWAY_OUT))
 				.routeId(Routes.FIND_ALL_PERSON_ROUTE_GATEWAY_OUT)
 				.routeGroup(Routes.FIND_ALL_PERSON_ROUTE_GROUP)
-				.to("sql:select * from persons?outputClass=com.saber.camel_spring_crud_server.dto.PersonDto")
-				.log("Response for find All persons ===> ${in.body}")
+				.to("sql:select * from persons?outputClass="+ PersonDto.class.getName())
+				.log("Response for ${in.header.url} , correlation : ${in.header.correlation} find All persons ===> ${in.body}")
 				.marshal().json(JsonLibrary.Jackson)
-				.log("Response for find All persons ===> ${in.body}")
+				.log("Response for ${in.header.url} , correlation : ${in.header.correlation} find All persons ===> ${in.body}")
 				.process(exchange -> {
 					String response = exchange.getIn().getBody(String.class);
 					response = String.format("{\"persons\":%s}", response.trim().toLowerCase());
 					exchange.getIn().setBody(response);
 				})
-				.log("Response for find All persons ===> ${in.body}")
+				.log("Response for ${in.header.url} , correlation : ${in.header.correlation} find All persons ===> ${in.body}")
 				.unmarshal().json(JsonLibrary.Jackson)
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200));
 	}

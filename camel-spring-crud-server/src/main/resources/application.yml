@@ -1,5 +1,13 @@
 server:
-  port: 9096
+  port: 9196
+  jetty:
+    threads:
+      min: 100
+      max: 3000
+      idle-timeout: 10000
+    connection-idle-timeout: 10000
+    accesslog:
+      enabled: true
   servlet:
     encoding:
       force: true
@@ -34,7 +42,7 @@ service:
   swagger:
     path: /v2/api-docs
     title: 'Camel spring crud server'
-    version: 'version1.0'
+    version: 'version1.0-1401/01/14'
   log:
     pretty-print: 'true'
 
@@ -56,23 +64,13 @@ springdoc:
 
 camel:
   springboot:
-    route-controller-thread-pool-size: 30000
-    producer-template-cache-size: 7000
-    consumer-template-cache-size: 7000
     jmx-management-statistics-level: extended
     main-run-controller: true
+    endpoint-runtime-statistics-enabled: true
 
   servlet:
     mapping:
       context-path: ${service.api.base-path}/*
-  component:
-    http:
-      connections-per-route: 3000
-      max-total-connections: 30000
-      connection-time-to-live: 30000
-      connection-request-timeout: 30000
-      connect-timeout: 30000
-      socket-timeout: 30000
   dataformat:
     json-jackson:
       pretty-print: true

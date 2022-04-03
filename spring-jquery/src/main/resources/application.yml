@@ -1,0 +1,25 @@
+server:
+  port: 9197
+  max-http-header-size: 512000
+  jetty:
+    threads:
+      min: 100
+      max: 3000
+      idle-timeout: 10000
+    connection-idle-timeout: 10000
+    accesslog:
+      enabled: true
+spring:
+  application:
+    name: spring-jquery
+
+
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'

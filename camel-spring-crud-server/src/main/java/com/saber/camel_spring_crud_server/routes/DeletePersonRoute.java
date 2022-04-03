@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class DeletePersonRoute extends AbstractRestRouteBuilder {
 
@@ -43,14 +45,16 @@ public class DeletePersonRoute extends AbstractRestRouteBuilder {
 				.route()
 				.routeId(Routes.DELETE_PERSON_ROUTE)
 				.routeGroup(Routes.DELETE_PERSON_ROUTE_GROUP)
+				.setHeader(Headers.url,constant("{{service.api.base-path}}/persons/delete/${in.header.nationalCode}"))
+				.setHeader(Headers.correlation,constant(UUID.randomUUID().toString()))
 				.to(String.format("direct:%s", Routes.DELETE_PERSON_ROUTE_GATEWAY));
 		
 		from(String.format("direct:%s", Routes.DELETE_PERSON_ROUTE_GATEWAY))
 				.routeId(Routes.DELETE_PERSON_ROUTE_GATEWAY)
 				.routeGroup(Routes.DELETE_PERSON_ROUTE_GROUP)
-				.setHeader(Headers.requestBody, simple("${in.body}"))
+				.log("Request for ${in.header.url} , correlation : ${in.header.correlation} with nationalCode ${in.header.nationalCode}")
 				.to(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY))
-				.log("Response for find Person by nationalCode ${in.header.nationalCode} ===> ${in.body}")
+				.log("Response for ${in.header.url} , correlation : ${in.header.correlation} with nationalCode ${in.header.nationalCode} ===> ${in.body}")
 				.choice()
 					.when(body().isNull())
 					.to(String.format("direct:%s", Routes.THROWS_RESOURCE_NOTFOUND_EXCEPTION_ROUTE))
@@ -66,7 +70,11 @@ public class DeletePersonRoute extends AbstractRestRouteBuilder {
 					DeletePersonResponseDto responseDto = new DeletePersonResponseDto();
 					responseDto.setCode(0);
 					responseDto.setMessage("Person deleted to table successfully");
-					log.info("Response for updated person for nationalCode ==> {}  , body ===> {}",exchange.getIn().getHeader(Headers.nationalCode),mapper.writeValueAsString(responseDto));
+					log.info("Response for {} , correlation : {} for nationalCode ==> {}  , body ===> {}"
+							,exchange.getIn().getHeader(Headers.url)
+							,exchange.getIn().getHeader(Headers.correlation)
+							,exchange.getIn().getHeader(Headers.nationalCode)
+							,mapper.writeValueAsString(responseDto));
 					exchange.getIn().setBody(responseDto);
 				})
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200));

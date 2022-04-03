@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class FindPersonByNationalCoeRoute extends AbstractRestRouteBuilder {
 
@@ -36,26 +38,28 @@ public class FindPersonByNationalCoeRoute extends AbstractRestRouteBuilder {
                 .route()
                 .routeId(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE)
                 .routeGroup(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GROUP)
+                .setHeader(Headers.url,constant("{{service.api.base-path}}/persons/findByNationalCode/${in.header.nationalCode}"))
+                .setHeader(Headers.correlation,constant(UUID.randomUUID().toString()))
                 .to(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY))
                 .to(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT));
 
         from(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY))
                 .routeId(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY)
                 .routeGroup(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GROUP)
-                .log("Request for find person by nationalCode ===> ${in.header.nationalCode}")
-                .toD("sql:select * from persons  where nationalCode=${in.header.nationalCode}?outputType=selectOne&outputClass=com.saber.camel_spring_crud_server.dto.PersonDto");
+                .log("Request for ${in.header.url} , correlation : ${in.header.correlation} find person by nationalCode ===> ${in.header.nationalCode}")
+                .toD("sql:select * from persons  where nationalCode=${in.header.nationalCode}?outputType=selectOne&outputClass="+PersonDto.class.getName());
 
         from(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT))
                 .routeId(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT)
                 .routeGroup(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GROUP)
-                .log("Response find person by nationalCode ===> ${in.header.nationalCode} ===> ${in.body}")
+                .log("Response for ${in.header.url} , correlation : ${in.header.correlation} find  person by nationalCode ===> ${in.header.nationalCode} ===> ${in.body}")
                 .choice()
                   .when(body().isNull())
                         .to(String.format("direct:%s", Routes.THROWS_RESOURCE_NOTFOUND_EXCEPTION_ROUTE))
                   .otherwise()
                     .to(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT_RESULT))
                 .end()
-                .log("Response find person by nationalCode ===> ${in.header.nationalCode} ===> ${in.body}");
+                .log("Response for ${in.header.url} , correlation : ${in.header.correlation} find person by nationalCode ===> ${in.header.nationalCode} ===> ${in.body}");
 
         from(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT_RESULT))
                 .routeId(Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY_OUT_RESULT)

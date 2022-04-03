@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -48,12 +49,14 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 				.route()
 				.routeId(Routes.SAY_HELLO_ROUTE)
 				.routeGroup(Routes.SAY_HELLO_ROUTE_GROUP)
+				.setHeader(Headers.url,constant("{{service.api.base-path}}/hello/sayHello"))
+				.setHeader(Headers.correlation,constant(UUID.randomUUID().toString()))
 				.to(String.format("direct:%s", Routes.SAY_HELLO_ROUTE_GATEWAY));
 		
 		from(String.format("direct:%s", Routes.SAY_HELLO_ROUTE_GATEWAY))
 				.routeId(Routes.SAY_HELLO_ROUTE_GATEWAY)
 				.routeGroup(Routes.SAY_HELLO_ROUTE_GROUP)
-				.log("Request for sayHello { firstName : ${in.header.firstName} , lastName : ${in.header.lastName}")
+				.log("Request for ${in.header.url} , correlation : ${in.header.correlation} sayHello { firstName : ${in.header.firstName} , lastName : ${in.header.lastName}")
 				.doTry()
 					.bean(SayHelloBean.class, "sayHello")
 					.to(String.format("direct:%s", Routes.SAY_HELLO_ROUTE_GATEWAY_OUT))
@@ -66,7 +69,7 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 		from(String.format("direct:%s", Routes.SAY_HELLO_ROUTE_GATEWAY_OUT))
 				.routeId(Routes.SAY_HELLO_ROUTE_GATEWAY_OUT)
 				.routeGroup(Routes.SAY_HELLO_ROUTE_GROUP)
-				.log("Response for sayHello ===>  ${in.body}")
+				.log("Response for ${in.header.url} , correlation : ${in.header.correlation} sayHello ===>  ${in.body}")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200));
 		
 		from(String.format("direct:%s", Routes.SAY_HELLO_ROUTE_ERROR_HANDLER))

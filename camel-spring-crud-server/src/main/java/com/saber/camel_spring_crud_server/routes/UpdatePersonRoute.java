@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class UpdatePersonRoute extends AbstractRestRouteBuilder {
@@ -48,15 +49,18 @@ public class UpdatePersonRoute extends AbstractRestRouteBuilder {
 				.route()
 				.routeId(Routes.UPDATE_PERSON_ROUTE)
 				.routeGroup(Routes.UPDATE_PERSON_ROUTE_GROUP)
+				.setHeader(Headers.url,constant("{{service.api.base-path}}/persons/update/${in.header.nationalCode}"))
+				.setHeader(Headers.correlation,constant(UUID.randomUUID().toString()))
 				.to("bean-validator://update-person-route")
 				.to(String.format("direct:%s", Routes.UPDATE_PERSON_ROUTE_GATEWAY));
 		
 		from(String.format("direct:%s", Routes.UPDATE_PERSON_ROUTE_GATEWAY))
 				.routeId(Routes.UPDATE_PERSON_ROUTE_GATEWAY)
 				.routeGroup(Routes.UPDATE_PERSON_ROUTE_GROUP)
+				.log("Request for ${in.header.url} , correlation : ${in.header.correlation} with body ${in.body} and nationalCode ${in.header.nationalCode}")
 				.setHeader(Headers.requestBody, simple("${in.body}"))
 				.to(String.format("direct:%s", Routes.FIND_PERSON_BY_NATIONAL_CODE_ROUTE_GATEWAY))
-				.log("Response for find Person by nationalCode ${in.header.nationalCode} ===> ${in.body}")
+				.log("Response for ${in.header.url} , correlation : ${in.header.correlation} find Person by nationalCode ${in.header.nationalCode} ===> ${in.body}")
 				.choice()
 					.when(body().isNull())
 					.to(String.format("direct:%s", Routes.THROWS_RESOURCE_NOTFOUND_EXCEPTION_ROUTE))
@@ -82,7 +86,7 @@ public class UpdatePersonRoute extends AbstractRestRouteBuilder {
 					UpdatePersonResponseDto responseDto = new UpdatePersonResponseDto();
 					responseDto.setCode(0);
 					responseDto.setMessage("Person updated to table successfully");
-					log.info("Response for updated person for nationalCode ==> {}  , body ===> {}",exchange.getIn().getHeader(Headers.nationalCode),mapper.writeValueAsString(responseDto));
+					log.info("Response for ${in.header.url} , correlation : ${in.header.correlation} updated person for nationalCode ==> {}  , body ===> {}",exchange.getIn().getHeader(Headers.nationalCode),mapper.writeValueAsString(responseDto));
 					exchange.getIn().setBody(responseDto);
 				})
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200));
