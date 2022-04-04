@@ -58,7 +58,7 @@ public class FindAllPersonRoute extends AbstractRestRouteBuilder {
 				.log("Response for ${in.header.url} , correlation : ${in.header.correlation} find All persons ===> ${in.body}")
 				.process(exchange -> {
 					String response = exchange.getIn().getBody(String.class);
-					response = String.format("{\"persons\":%s}", response.trim().toLowerCase());
+					response = String.format("{\"persons\":%s}", response.trim());
 					exchange.getIn().setBody(response);
 				})
 				.log("Response for ${in.header.url} , correlation : ${in.header.correlation} find All persons ===> ${in.body}")

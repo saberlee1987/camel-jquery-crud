@@ -1,6 +1,5 @@
 package com.saber.camel_spring_crud_server.dto;
 
-import com.saber.camel_spring_crud_server.validations.NationalCode;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,7 +20,7 @@ public class PersonDto {
 	@NotBlank(message = "nationalCode is Required")
 	@Size(min = 1, max = 10, message = "nationalCode must be < 10 digits")
 	@Pattern(regexp = "\\d{10}", message = "nationalCode is not digits")
-	@NationalCode(message = "nationalCode is not valid")
+	//@NationalCode(message = "nationalCode is not valid")
 	@ApiModelProperty(value = "nationalCode", example = "0079028748", position = 3)
 	private String nationalCode;
 	@NotNull(message = "age is Required")

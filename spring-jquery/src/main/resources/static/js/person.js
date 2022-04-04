@@ -3,8 +3,8 @@ let BASEURL = "http://localhost:9196/services/camel-crud/persons"
 $(document).ready(function () {
 
     loadDataInTable()
-    $("#personForm").on("submit", function (event) {
-        event.preventDefault()
+
+    $("#addPerson").on('click', function () {
         let firstName = $("#firstName").val()
         let lastName = $("#lastName").val()
         let nationalCode = $("#nationalCode").val()
@@ -108,10 +108,143 @@ $(document).ready(function () {
                 console.log("error ====> " + errorResponse)
                 $("#result").text(data.responseJSON.message)
             }
+            , complete: function () {
+               clearData()
+                loadDataInTable()
+            }
         })
+
+
+    })
+
+    $("#personForm").on("submit", function (event) {
+        event.preventDefault()
+
     });
 
+    $(document).on('click', '#btnUpdate', function () {
+        console.log("btn update clicked .................")
+        $this = $(this)
+        let nationalCode = $this.attr('data-person-nationalCode')
+
+        let findPersonUrl = `${BASEURL}/findByNationalCode/${nationalCode}`
+        console.log("request for find person  for nationalCode " + nationalCode + "===> " + findPersonUrl)
+
+        $.ajax({
+            url: findPersonUrl,
+            method: 'GET',
+            accept: 'application/json',
+            contentType: 'application/json'
+            , success: function (response) {
+                console.log(JSON.stringify(response))
+
+                $("#firstName").val(response.firstname)
+                $("#lastName").val(response.lastname)
+                $("#nationalCode").val(response.nationalCode)
+                $("#age").val(response.age)
+                $("#email").val(response.email)
+                $("#mobile").val(response.mobile)
+
+            }
+            , error: function (err) {
+                let errorResponse = JSON.stringify(err.responseJSON)
+                console.log("error ====> " + errorResponse)
+                $("#result").text(err.responseJSON.message)
+            }
+        })
+
+    });
+
+    $(document).on('click', '#btnDelete', function () {
+        console.log("btn delete clicked .................")
+        $this = $(this)
+        let nationalCode = $this.attr('data-person-nationalCode')
+        console.log("nationalCode ===> " + nationalCode)
+        let deletePersonUrl = `${BASEURL}/delete/${nationalCode}`
+        console.log("request for delete person  for nationalCode " + nationalCode + "===> " + deletePersonUrl)
+
+        $.ajax({
+            url: deletePersonUrl,
+            method: 'DELETE',
+            accept: 'application/json',
+            contentType: 'application/json'
+            , success: function (data) {
+                console.log("success ====> " + JSON.stringify(data.responseJSON))
+                $("#result").text("your data deleted successfully")
+            }
+            , error: function (data) {
+                let errorResponse = JSON.stringify(data.responseJSON)
+                console.log("error ====> " + errorResponse)
+                $("#result").text(data.responseJSON.message)
+            }, complete: function () {
+                loadDataInTable()
+            }
+        })
+
+    });
+
+    $("#updatePerson").on('click', function () {
+
+        let firstName = $("#firstName").val()
+        let lastName = $("#lastName").val()
+        let nationalCode = $("#nationalCode").val()
+        let age = $("#age").val()
+        let email = $("#email").val()
+        let mobile = $("#mobile").val()
+
+        let json = {
+            firstname: firstName,
+            lastname: lastName,
+            nationalCode: nationalCode,
+            age: age,
+            email: email,
+            mobile: mobile,
+        }
+        console.log("json ===> " + JSON.stringify(json))
+        json = JSON.stringify(json)
+
+        let updatePersonUrl = `${BASEURL}/update/${nationalCode}`
+        console.log("request for update person ===> " + updatePersonUrl)
+
+
+        $.ajax({
+            url: updatePersonUrl,
+            data: json,
+            body: json,
+            method: 'PUT',
+            accept: 'application/json',
+            contentType: 'application/json'
+            , success: function (data) {
+                console.log("success ====> " + JSON.stringify(data.responseJSON))
+                $("#result").text("your data updated successfully")
+            }
+            , error: function (data) {
+                let errorResponse = JSON.stringify(data.responseJSON)
+                console.log("error ====> " + errorResponse)
+                $("#result").text(data.responseJSON.message)
+            }
+            , complete: function () {
+                clearData()
+                loadDataInTable()
+            }
+        })
+
+    });
+
+    $("#cancelPerson").on('click', function () {
+        clearData()
+    })
 })
+
+function clearData() {
+    $("#firstName").val('')
+    $("#lastName").val('')
+    $("#nationalCode").val('')
+    $("#age").val('')
+    $("#email").val('')
+    $("#mobile").val('')
+    $("#result").val('')
+}
 
 function loadDataInTable() {
     let findAllPersonUrl = `${BASEURL}/findAll`
@@ -132,18 +265,19 @@ function loadDataInTable() {
                     $('<td>').text(item.age),
                     $('<td>').text(item.email),
                     $('<td>').text(item.mobile),
-                    $('<td>').append($('<button class="btn btn-warning" id="btnUpdate">Update</button>')),
-                    $('<td>').append($('<button class="btn btn-danger" id="btnDelete">Delete</button>')),
+                    $('<td>').append($(`<button class="btn btn-warning" id="btnUpdate" data-person-nationalCode="${item.nationalCode}">Update</button>`)),
+                    $('<td>').append($(`<button class="btn btn-danger" id="btnDelete" data-person-nationalCode="${item.nationalCode}">Delete</button>`)),
                 ); //.appendTo('#records_table');
                 console.log($tr.wrap('<p>').html());
                 $("#tbody").append($tr)
             });
-            // $("#result").text("your data saved successfully")
         }
-        , error: function (data) {
-            let errorResponse = JSON.stringify(data.responseJSON)
+        , error: function (err) {
+            let errorResponse = JSON.stringify(err.responseJSON)
             console.log("error ====> " + errorResponse)
-            $("#result").text(data.responseJSON.message)
+            $("#result").text(err.responseJSON.message)
         }
     })
+
+
 }
