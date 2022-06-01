@@ -2,12 +2,9 @@ package com.saber.camel_spring_crud_server.routes;
 
 import com.saber.camel_spring_crud_server.dto.FindAllPersonResponse;
 import com.saber.camel_spring_crud_server.dto.PersonDto;
-import com.saber.camel_spring_crud_server.dto.ServiceErrorResponse;
 import org.apache.camel.Exchange;
 import org.apache.camel.model.dataformat.JsonLibrary;
-import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -25,21 +22,11 @@ public class FindAllPersonRoute extends AbstractRestRouteBuilder {
 				.get("/findAll")
 				.id(Routes.FIND_ALL_PERSON_ROUTE)
 				.description("find All Persons")
-				.produces(MediaType.APPLICATION_JSON_VALUE)
 				.responseMessage().code(HttpStatus.OK.value()).message(HttpStatus.OK.getReasonPhrase()).responseModel(FindAllPersonResponse.class).example("example1","{\"firstname\": \"saber\",\"lastname\": \"azizi\", \"nationalCode\": \"0079028748\",\"age\": 34,\"email\": \"saberazizi66@yahoo.com\",\"mobile\": \"09124567895\"}").endResponseMessage()
-				.responseMessage().code(HttpStatus.BAD_REQUEST.value()).message(HttpStatus.BAD_REQUEST.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.UNAUTHORIZED.value()).message(HttpStatus.UNAUTHORIZED.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.FORBIDDEN.value()).message(HttpStatus.FORBIDDEN.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.NOT_FOUND.value()).message(HttpStatus.NOT_FOUND.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.NOT_ACCEPTABLE.value()).message(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).message(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.enableCORS(true)
-				.bindingMode(RestBindingMode.json)
 				.route()
 				.routeId(Routes.FIND_ALL_PERSON_ROUTE)
 				.routeGroup(Routes.FIND_ALL_PERSON_ROUTE_GROUP)
-				.setHeader(Headers.url,constant("{{service.api.base-path}}/persons/findAll"))
+				.setHeader(Headers.url,simple("{{service.api.base-path}}/persons/findAll"))
 				.setHeader(Headers.correlation,constant(UUID.randomUUID().toString()))
 				.to(String.format("direct:%s", Routes.FIND_ALL_PERSON_ROUTE_GATEWAY));
 		

@@ -3,9 +3,7 @@ package com.saber.camel_spring_crud_server.routes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saber.camel_spring_crud_server.dto.AddPersonResponseDto;
 import com.saber.camel_spring_crud_server.dto.PersonDto;
-import com.saber.camel_spring_crud_server.dto.ServiceErrorResponse;
 import org.apache.camel.Exchange;
-import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -32,23 +30,13 @@ public class AddPersonRoute extends AbstractRestRouteBuilder {
 				.post("/add")
 				.id(Routes.ADD_PERSON_ROUTE)
 				.description("add person")
-				.produces(MediaType.APPLICATION_JSON_VALUE)
 				.consumes(MediaType.APPLICATION_JSON_VALUE)
 				.responseMessage().code(HttpStatus.OK.value()).message(HttpStatus.OK.getReasonPhrase()).responseModel(AddPersonResponseDto.class).example("example1","{\"firstname\": \"saber\",\"lastname\": \"azizi\", \"nationalCode\": \"0079028748\",\"age\": 34,\"email\": \"saberazizi66@yahoo.com\",\"mobile\": \"09124567895\"}").endResponseMessage()
-				.responseMessage().code(HttpStatus.BAD_REQUEST.value()).message(HttpStatus.BAD_REQUEST.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.UNAUTHORIZED.value()).message(HttpStatus.UNAUTHORIZED.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.FORBIDDEN.value()).message(HttpStatus.FORBIDDEN.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.NOT_FOUND.value()).message(HttpStatus.NOT_FOUND.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.NOT_ACCEPTABLE.value()).message(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).message(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.bindingMode(RestBindingMode.json)
-				.enableCORS(true)
 				.type(PersonDto.class)
 				.route()
 				.routeId(Routes.ADD_PERSON_ROUTE)
 				.routeGroup(Routes.ADD_PERSON_ROUTE_GROUP)
-				.setHeader(Headers.url,constant("{{service.api.base-path}}/persons/add"))
+				.setHeader(Headers.url,simple("{{service.api.base-path}}/persons/add"))
 				.setHeader(Headers.correlation,constant(UUID.randomUUID().toString()))
 				.to("bean-validator://add-person-route")
 				.to(String.format("direct:%s", Routes.ADD_PERSON_ROUTE_GATEWAY));

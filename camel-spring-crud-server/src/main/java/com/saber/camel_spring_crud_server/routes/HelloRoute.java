@@ -2,17 +2,15 @@ package com.saber.camel_spring_crud_server.routes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saber.camel_spring_crud_server.beans.SayHelloBean;
+import com.saber.camel_spring_crud_server.dto.ErrorResponseDto;
 import com.saber.camel_spring_crud_server.dto.HelloResponseDto;
-import com.saber.camel_spring_crud_server.dto.ServiceErrorResponse;
 import com.saber.camel_spring_crud_server.dto.ValidationDto;
 import com.saber.camel_spring_crud_server.exceptions.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
-import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestParamType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -34,18 +32,8 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 				.id(Routes.SAY_HELLO_ROUTE)
 				.description("say Hello")
 				.responseMessage().code(HttpStatus.OK.value()).message(HttpStatus.OK.getReasonPhrase()).responseModel(HelloResponseDto.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.BAD_REQUEST.value()).message(HttpStatus.BAD_REQUEST.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.UNAUTHORIZED.value()).message(HttpStatus.UNAUTHORIZED.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.FORBIDDEN.value()).message(HttpStatus.FORBIDDEN.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.NOT_FOUND.value()).message(HttpStatus.NOT_FOUND.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.NOT_ACCEPTABLE.value()).message(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).message(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.responseMessage().code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase()).responseModel(ServiceErrorResponse.class).endResponseMessage()
-				.produces(MediaType.APPLICATION_JSON_VALUE)
 				.param().name("firstName").type(RestParamType.query).dataType("string").required(true).example("Saber").endParam()
 				.param().name("lastName").type(RestParamType.query).dataType("string").required(true).example("Azizi").endParam()
-				.enableCORS(true)
-				.bindingMode(RestBindingMode.json)
 				.route()
 				.routeId(Routes.SAY_HELLO_ROUTE)
 				.routeGroup(Routes.SAY_HELLO_ROUTE_GROUP)
@@ -77,7 +65,7 @@ public class HelloRoute extends AbstractRestRouteBuilder {
 				.routeGroup(Routes.SAY_HELLO_ROUTE_GROUP)
 				.process(exchange -> {
 					BadRequestException exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, BadRequestException.class);
-					ServiceErrorResponse errorResponse = new ServiceErrorResponse();
+					ErrorResponseDto errorResponse = new ErrorResponseDto();
 					errorResponse.setCode(4);
 					errorResponse.setMessage("BadRequestException");
 					ValidationDto validationDto = new ValidationDto();

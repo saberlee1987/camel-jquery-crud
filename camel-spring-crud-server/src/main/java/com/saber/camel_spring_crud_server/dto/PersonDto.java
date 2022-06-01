@@ -1,9 +1,10 @@
 package com.saber.camel_spring_crud_server.dto;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.LongSerializationPolicy;
+import com.google.gson.ToNumberPolicy;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.validation.constraints.*;
 
@@ -40,13 +41,12 @@ public class PersonDto {
 	
 	@Override
 	public String toString() {
-		return  new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
-				.append("firstname", firstname)
-				.append("lastname", lastname)
-				.append("nationalCode", nationalCode)
-				.append("age", age)
-				.append("email", email)
-				.append("mobile", mobile)
-				.toString();
+		return new GsonBuilder()
+				.setLenient()
+				.setPrettyPrinting()
+				.enableComplexMapKeySerialization()
+				.setLongSerializationPolicy(LongSerializationPolicy.DEFAULT)
+				.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+				.create().toJson(this, PersonDto.class);
 	}
 }

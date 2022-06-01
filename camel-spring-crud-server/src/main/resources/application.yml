@@ -42,7 +42,7 @@ service:
   swagger:
     path: /v2/api-docs
     title: 'Camel spring crud server'
-    version: 'version1.0-1401/01/14'
+    version: 'version1.0.1-1401/03/11 15:36'
   log:
     pretty-print: 'true'
 

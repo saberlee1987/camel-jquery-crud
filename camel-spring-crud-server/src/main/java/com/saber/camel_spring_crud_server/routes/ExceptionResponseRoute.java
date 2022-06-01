@@ -3,7 +3,7 @@ package com.saber.camel_spring_crud_server.routes;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saber.camel_spring_crud_server.dto.ServiceErrorResponse;
+import com.saber.camel_spring_crud_server.dto.ErrorResponseDto;
 import com.saber.camel_spring_crud_server.dto.ServiceResponseEnum;
 import com.saber.camel_spring_crud_server.dto.ValidationDto;
 import com.saber.camel_spring_crud_server.exceptions.ResourceDuplicationException;
@@ -36,7 +36,7 @@ public class ExceptionResponseRoute extends RouteBuilder {
 				.routeGroup(Routes.EXCEPTION_HANDLER_ROUTE_GROUP)
 				.process(exchange -> {
 					JsonMappingException exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, JsonMappingException.class);
-					ServiceErrorResponse errorResponse = new ServiceErrorResponse();
+					ErrorResponseDto errorResponse = new ErrorResponseDto();
 					errorResponse.setCode(ServiceResponseEnum.JSON_MAPPING_EXCEPTION.getCode());
 					errorResponse.setMessage(ServiceResponseEnum.JSON_MAPPING_EXCEPTION.getMessage());
 					errorResponse.setOriginalMessage(String.format("{\"code\":%d,\"message\":\"%s\"}", ServiceResponseEnum.JSON_MAPPING_EXCEPTION.getCode(), exception.getOriginalMessage()));
@@ -57,7 +57,7 @@ public class ExceptionResponseRoute extends RouteBuilder {
 				.routeGroup(Routes.EXCEPTION_HANDLER_ROUTE_GROUP)
 				.process(exchange -> {
 					JsonParseException exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, JsonParseException.class);
-					ServiceErrorResponse errorResponse = new ServiceErrorResponse();
+					ErrorResponseDto errorResponse = new ErrorResponseDto();
 					errorResponse.setCode(ServiceResponseEnum.JSON_MAPPING_EXCEPTION.getCode());
 					errorResponse.setMessage(ServiceResponseEnum.JSON_MAPPING_EXCEPTION.getMessage());
 					errorResponse.setOriginalMessage(String.format("{\"code\":%d,\"message\":\"%s\"}", ServiceResponseEnum.JSON_MAPPING_EXCEPTION.getCode(), exception.getOriginalMessage()));
@@ -79,7 +79,7 @@ public class ExceptionResponseRoute extends RouteBuilder {
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(406))
 				.process(exchange -> {
 					ResourceDuplicationException exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, ResourceDuplicationException.class);
-					ServiceErrorResponse errorResponse = new ServiceErrorResponse();
+					ErrorResponseDto errorResponse = new ErrorResponseDto();
 					errorResponse.setCode(ServiceResponseEnum.RESOURCE_DUPLICATION_EXCEPTION.getCode());
 					errorResponse.setMessage(ServiceResponseEnum.RESOURCE_DUPLICATION_EXCEPTION.getMessage());
 					errorResponse.setOriginalMessage(String.format("{\"code\":%d,\"message\":\"%s\"}", ServiceResponseEnum.RESOURCE_DUPLICATION_EXCEPTION.getCode(), exception.getMessage()));
@@ -97,7 +97,7 @@ public class ExceptionResponseRoute extends RouteBuilder {
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(406))
 				.process(exchange -> {
 					ResourceNotFoundException exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, ResourceNotFoundException.class);
-					ServiceErrorResponse errorResponse = new ServiceErrorResponse();
+					ErrorResponseDto errorResponse = new ErrorResponseDto();
 					errorResponse.setCode(ServiceResponseEnum.RESOURCE_NOT_FOUND_EXCEPTION.getCode());
 					errorResponse.setMessage(ServiceResponseEnum.RESOURCE_NOT_FOUND_EXCEPTION.getMessage());
 					errorResponse.setOriginalMessage(String.format("{\"code\":%d,\"message\":\"%s\"}", ServiceResponseEnum.RESOURCE_NOT_FOUND_EXCEPTION.getCode(), exception.getMessage()));
@@ -116,7 +116,7 @@ public class ExceptionResponseRoute extends RouteBuilder {
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
 				.process(exchange -> {
 					BeanValidationException exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, BeanValidationException.class);
-					ServiceErrorResponse errorResponse = new ServiceErrorResponse();
+					ErrorResponseDto errorResponse = new ErrorResponseDto();
 					errorResponse.setCode(ServiceResponseEnum.BEAN_VALIDATION_EXCEPTION.getCode());
 					errorResponse.setMessage(ServiceResponseEnum.BEAN_VALIDATION_EXCEPTION.getMessage());
 					
